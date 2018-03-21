@@ -1,0 +1,156 @@
+@charset "utf-8";
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width:100%;
+    background-color: #23272A;
+}
+
+
+@listHei : 6rem;
+@itemHei : @listHei / 5;
+
+/*滚动条样式*/
+// 定义了滚动条整体的样式
+.block::-webkit-scrollbar { 
+    width:0rem;
+    height:0rem;
+}
+
+//
+.cont-sarea {
+	position: fixed;
+	bottom: 0;
+	left:0;
+	width: 100%;
+	height:100%;
+	background: rgba(13,13,13,0.2);
+
+	display: none;
+}
+
+.cont-sarea-show {
+	display: block;
+}
+
+.sarea {
+	width:100%;
+	height:7rem;
+	background-color: white;
+
+	position: absolute;
+	bottom: 0;
+}
+.sarea-hd {
+	position: relative;
+
+	width:100%;
+	height:1rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	span.btn {
+		font-size: 0.4rem;
+    	color: blue;
+    	margin-left: 0.3rem;
+    	margin-right: 0.3rem;
+	}
+}
+.sarea-hd:after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    display: block;
+    background-color: #96979b;
+    z-index: 15;
+    transform: scaleY(0.33);
+    bottom: 0;
+}
+
+.sarea-bd {
+	position: relative;
+	width:100%;
+	height:@listHei;
+	// background-color: red;
+
+	display: flex;
+
+	background: #d5d8df;
+	-webkit-mask: -webkit-linear-gradient(bottom, #debb47 50%, rgba(36, 142, 36, 0));
+
+	.selmask {
+	    position: absolute;
+	    top: @itemHei * 2;
+	    width: 100%;
+	    height: @itemHei;
+	    margin: 0;
+	    box-sizing: border-box;
+	    z-index: 0;
+	    border-top: 1px solid #abaeb5;
+	    border-bottom: 1px solid #abaeb5;
+    }
+
+	.block  {
+		height:100%;
+		width:100%;
+	    overflow: scroll;
+
+	    -webkit-mask: -webkit-linear-gradient(top, #debb47 50%, rgba(36, 142, 36, 0));
+	}
+	.block-stop {
+		overflow: hidden;	
+	}
+	.block-pro {
+		// background-color: white;
+	}
+	.block-city {
+		// background-color: yellow;
+	}
+	.block-dist {
+		// background-color: blue;
+	}
+}
+.sarea-bd:after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    display: block;
+    background-color: #96979b;
+    z-index: 15;
+    transform: scaleY(0.33);
+    bottom: 0;
+}
+
+ul.sarea-list {
+    width: 100%;
+    margin: auto;
+    padding: 0;
+}
+li.sarea-item {
+    list-style-type: none;
+    font-size: 0.5rem;
+    text-align: center;
+    height: @itemHei;
+    line-height: @itemHei;
+
+    overflow: hidden;
+}
+// .sarea-item-1 {
+// 	background: red;
+// }
+// .sarea-item-2 {
+// 	background: white;
+// }
+// .sarea-item-3 {
+// 	background: blue;
+// }
+// .sarea-item-4 {
+// 	background: green;
+// }
+// .sarea-item-5 {
+// 	background: yellow;
+// }

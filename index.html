@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>sarea</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+	<!-- 引入插件 -->
+	<script src="public/areaData.js" type="text/javascript" charset="utf-8"></script>
+	<script src="public/sarea.js" type="text/javascript" charset="utf-8"></script>	
+	<link rel="stylesheet" href="css/sarea.css?1">
+
+	<script>
+		/* 宽适配 
+		改下单位，使到不用宽适配7.5rem的项目也能用
+		使用 em 代替 rem 搞定！
+		*/
+        // var CW_REM = 7.5
+        // var CH = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        // var CW = Math.min( window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth, CH * 1.4 ); 
+        // var CH_REM = CH / CW * CW_REM
+        // document.documentElement.style.fontSize = (CW / CW_REM) + 'px';
+	</script>
+	<style>
+	html, body {
+	    margin: 0;
+	    padding: 0;
+	    height: 100%;
+	    width:100%;
+	    background-color: #23272A;
+	}
+
+	</style>
+</head>
+<body>
+
+<div id="btn-1" class="btn btn-1" style="width:4em;height:4em;background:red;"></div>
+
+
+<script>
+
+	/*一级联动 eg:
+	var jobData = {
+		'前端':1,
+		'后端':2,
+		'美工':3,
+		'策划':4,
+		'老板':5,
+		'董事长':6,
+		'A':7,
+		'B':8,
+		'C':9,
+		'D':10,
+	}
+	sarea.init(jobData, 1)
+	sarea.addSelEventListener(function(data) {
+		console.log(data)
+	})
+	document.getElementById('btn-1').onclick = function() {
+		sarea.open()	
+	}
+	*/
+	/*end of */
+
+	/*二级联动 eg: 
+	var foodData = {
+		'菜': {
+			id: 0,
+			items: {
+				'白菜':1,
+				'芥蓝':2,
+				'花菜':3
+			}
+		}
+		,'肉': {
+			id: 1,
+			items: {
+				'牛肉':1,
+				'猪肉':2,
+				'鸡肉':3
+			}
+		}
+	}
+	sarea.init(foodData, 2)
+	sarea.addSelEventListener(function(data) {
+		console.log(data)
+	})
+	document.getElementById('btn-1').onclick = function() {
+		sarea.open()	
+	}
+	*/
+	/*end of */
+
+
+
+	/*三级联动 eg:*/
+	sarea.init(areaData, 3)  //areaData 地区选择
+	sarea.addSelEventListener(function(data) {
+		console.log('sel', data)
+	})
+	document.getElementById('btn-1').onclick = function() {
+		sarea.open(['天津'])	
+		// sarea.open(['天津', '县', '武清县'])	
+	}
+	/*end of */ 
+
+
+	// ktest
+	function kkk(keyAry) {
+		let data = areaData;
+		for(let idx = 1; idx < keyAry.length; idx++) {
+			let key = keyAry[idx]
+			if(data[key] && data[key].items) {
+				data = data[key].items
+			}
+			else {
+				break
+			}
+		}
+		return data
+	}
+	// console.log( kkk('', '北京') )
+	// let ary = ['', '北京', '11']
+	// //没有设置的，默认选中第一项
+	// let needDefNum = 3 - (ary.length - 1)
+	// if(needDefNum > 0) {   
+	// 	let tmpData = this.getValByKeyAry(ary)
+	// 	for(let idx = 0; idx < needDefNum; idx++) {
+	// 		for(let key in tmpData) {
+	// 			ary.push(key)
+	// 			tmpData = tmpData[key].items
+	// 			break
+	// 		}
+	// 	}
+	// }
+</script>
+
+
+</body>
+</html>
+
