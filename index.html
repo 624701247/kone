@@ -99,26 +99,27 @@
 		console.log('sel', data)
 	})
 	document.getElementById('btn-1').onclick = function() {
-		sarea.open(['天津'])	
+		sarea.open(['香港'])
+
 		// sarea.open(['天津', '县', '武清县'])	
 	}
 	/*end of */ 
 
 
 	// ktest
-	function kkk(keyAry) {
-		let data = areaData;
-		for(let idx = 1; idx < keyAry.length; idx++) {
-			let key = keyAry[idx]
-			if(data[key] && data[key].items) {
-				data = data[key].items
-			}
-			else {
-				break
-			}
-		}
-		return data
-	}
+	// function kkk(keyAry) {
+	// 	let data = areaData;
+	// 	for(let idx = 1; idx < keyAry.length; idx++) {
+	// 		let key = keyAry[idx]
+	// 		if(data[key] && data[key].items) {
+	// 			data = data[key].items
+	// 		}
+	// 		else {
+	// 			break
+	// 		}
+	// 	}
+	// 	return data
+	// }
 	// console.log( kkk('', '北京') )
 	// let ary = ['', '北京', '11']
 	// //没有设置的，默认选中第一项

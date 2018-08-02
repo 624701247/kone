@@ -56,6 +56,7 @@ export class SelScroll {
 	}
 
 	setCurSel(curIdx) {
+		console.log('curIdx', curIdx)
 		this.el_cont.scrollTop = (curIdx) * this.itemHei
 	}
 
@@ -67,24 +68,25 @@ export class SelScroll {
 
 			this.curTop = ev.target.scrollTop
 
-			clog('strrt', ev)
+			// console.log('strrt', ev)
 			this.scTimer = setInterval(function() {
 				this.onScTimer(ev.target)
 			}.bind(this), 400)
 		}
 		else {
 			this.curTop = ev.target.scrollTop
-			clog('runing', ev.target.scrollTop)
+			// console.log('runing', ev.target.scrollTop)
 		}
 	}
 
 	onScTimer (target) {
 		if(this.curTop == target.scrollTop) {
-			clog('end', this.curTop)
+			// console.log('end', this.curTop)
 
 			this.curTag =  Math.round(target.scrollTop / this.itemHei) //4舍5入
 			this.onSel()
 
+			// console.log('this.curTag', this.curTag)
 			let endTop = this.itemHei * this.curTag
 			if(endTop > this.maxTop) {
 				endTop = this.maxTop
@@ -106,20 +108,20 @@ export class SelScroll {
 
 		let dist = endTop - target.scrollTop
 		var step = dist / Math.abs(dist) * 2
-		clog('step1', step)
+		// console.log('slow step', step)
 
 		this.slowAniTimer = setInterval(function() {
 			target.scrollTop += step			
 			if( (step >= 0 && target.scrollTop >= endTop) ||
 				(step < 0 && target.scrollTop <= endTop)   ) {
 				target.scrollTop = endTop
-				
+				// console.log('eeee', endTop)
+
 				clearInterval(this.slowAniTimer)
 				this.slowAniTimer = null 
 
 			 	setTimeout(function() {
 			 		this.inSlowAni = false
-		 			clog('eeee')		
 			 	}.bind(this), 100)
 			 	
 			 	utils.removeClass(target, 'block-stop')
@@ -129,20 +131,21 @@ export class SelScroll {
 
 	// 创建列表
 	addList() {
+		let count = 0
 		let str = ''
-		str += this.createItem('')
-		str += this.createItem('')
+		str += this.createItem('', ++count)
+		str += this.createItem('', ++count)
 		for(let key in this.listData)  {
-			str += this.createItem(key)
+			str += this.createItem(key, ++count)
 		}
-		str += this.createItem('')
-		str += this.createItem('')
+		str += this.createItem('', ++count)
+		str += this.createItem('', ++count)
 		this.el_list.innerHTML = str
 	}
 
 	// 创建选择项
-	createItem(val) {
-		return '<li class="sarea-item sarea-item-' + this.bId + '">' + val + '</li>'
+	createItem(val, id) {
+		return '<li id="sarea-item-' + id + '" class="sarea-item sarea-item-' + this.bId + '">' + val + '</li>'
 	}
 
 	// 
@@ -152,7 +155,8 @@ export class SelScroll {
 
 		this.el_items = this.el_list.getElementsByClassName('sarea-item')
 		if(this.itemHei == null) {
-			this.itemHei = this.el_items[0].clientHeight
+			// this.itemHei = this.el_items[0].clientHeight //这样会有误差，导致滚到结尾位置不准确
+			this.itemHei = this.el_cont.clientHeight  / 5
 		}
 		this.updateMaxTop()
 

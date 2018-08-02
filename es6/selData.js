@@ -16,6 +16,7 @@ class SelData {
 		return this.blockNum
 	}
 
+	// 
 	initSelAry(ary) {
 		ary = ary || []
 			ary.splice(0, 0, '');
@@ -27,7 +28,9 @@ class SelData {
 			for(let idx = 0; idx < needDefNum; idx++) {
 				let key = this.getFirstKey(tmpData)
 				ary.push(key)
-				tmpData = tmpData[key].items
+				if(tmpData[key] && tmpData[key]) {
+					tmpData = tmpData[key].items
+				}
 			}
 		}
 

@@ -1,6 +1,5 @@
 import * as utils from "./utils"
 
-
 import {selData} from "./selData"
 
 import {SelScroll} from "./SelScroll"
@@ -56,7 +55,7 @@ export var init = function(data, bNum) {
 
 	// 取消按钮
 	document.querySelector('#btn-area-cancel').onclick = function() {
-		console.log('cccc')
+		// console.log('cccc')
 		close()
 	}
 
