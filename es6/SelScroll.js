@@ -73,6 +73,8 @@ export class SelScroll {
 		if(this.inSlowAni) {
 			return
 		}
+
+		this.inSlowAni = true
 		this.inTouch = true
 
 		var touch = ev.changedTouches[0]
@@ -117,7 +119,7 @@ export class SelScroll {
 				// clog('往上滑动')
 				dir = 1
 			}
-			this.slide(dir, timeDif / 400)
+			this.slide(ev, dir, timeDif / 400)
 		}
 		else {
 			// clog('拖动')
@@ -128,28 +130,28 @@ export class SelScroll {
 	// 拖动操作
 	drag(ev, isEnd) {
 		var touch = ev.changedTouches[0]
-		var newTop = this.el_cont.scrollTop + this.curMoveClientY - touch.clientY
+		var newClientY = touch.clientY
+		var target = ev.currentTarget
+		var newTop = target.scrollTop + this.curMoveClientY - newClientY
 		if(newTop < 0) {
 			newTop = 0
-			// console.log('min')
 		}
 		if(newTop > this.maxTop) {
 			newTop = this.maxTop
-			// console.log('max')
 		}
-		this.el_cont.scrollTop = newTop
-		this.curMoveClientY = touch.clientY
+		target.scrollTop = newTop
+		this.curMoveClientY = newClientY
 
 		if(isEnd) {
-			this.aniSlowTop()
+			console.log('eee0', newTop)
+			this.aniSlowTop(target)
 		}
 	}
 
 	// 滑动操作
 	// @param rate : 0 -- 1 开区间 
-	slide(dir, rate) {
-		// console.log('slide', dir, rate)
-		var target = this.el_cont
+	slide(ev, dir, rate) {
+		var target = ev.currentTarget//this.el_cont
 		var distTop = target.scrollTop + dir * this.maxTop * (1 - rate)
 		if(distTop < 0) {
 			distTop = 0
@@ -157,32 +159,41 @@ export class SelScroll {
 		if(distTop > this.maxTop) {
 			distTop = this.maxTop
 		}
-		var step = 2
+
+		var dif = distTop - target.scrollTop
+		var step;
+		if(dif > 0) {
+			step = 30
+		}
+		else {
+			step = -30
+		}
+		var count = Math.round(Math.abs(dif / step))
 
 		var isEnd = false
 		var timer = setInterval(function() {
+			count--
 			var newTop = target.scrollTop + step
-			if(Math.abs(newTop - target.scrollTop) <= step) {
+			if(count <= 0) {
 				newTop = distTop
 				isEnd = true
-				// clog('slide end')
+				// clog('sl ide end')
 			}
 			target.scrollTop = newTop
 
-
 			if(isEnd) {
 				clearInterval(timer)
-				this.aniSlowTop()
+				this.aniSlowTop(target)
 			}
 
-		}.bind(this), 50)
+		}.bind(this), 25)
 
 	}
 
-	// 
-	aniSlowTop() {
-		// clog('ani slow')
-		this.inSlowAni = true
+	// @param target : 动画dom对象
+	// @param endTop : 动画结束位置
+	aniSlowTop(target) {
+		// this.inSlowAni = true
 
 		//  更新选中数据 跟 子列表
 		var info = this.getCurSelInfo()
@@ -192,41 +203,51 @@ export class SelScroll {
 		}
 		console.log('cur sel info', this.bId, info.tag, info.name)
 
-		var target = this.el_cont
+		// var target = this.el_cont
 		var endTop = info.tag * this.itemHei
 
+		console.log('sss', target.scrollTop, endTop)
 		if(target.scrollTop == endTop) {
 			this.onAniSlowTopEnd()
-			// clog(' == ')
+			console.log(' == ')
 			return 
 		}
 
 		utils.addClass(target, 'block-stop')
 
-		let dist = endTop - target.scrollTop
-		var step = 0.5 //dist / Math.abs(dist) * 2
-		// clog(' != ' + step)
+		var step; 
+		var dif = endTop - target.scrollTop
+		if(dif > 0) {
+			step = 1
+		}
+		else {
+			step = -1
+		}
+
+		var count = Math.round(Math.abs(dif / step))
 
 		this.slowAniTimer = setInterval(function() {
+			count--
 			var newTop = target.scrollTop + step			
-			if(Math.abs(newTop -  target.scrollTop) <= step) {
+
+			if(count <= 0) {
 				target.scrollTop = endTop
 
 				utils.removeClass(target, 'block-stop')
 				clearInterval(this.slowAniTimer)
 				this.slowAniTimer = null 			 	
 			 	this.onAniSlowTopEnd()
+			 	console.log('eeeee')
 			}
 			else {
 				target.scrollTop = newTop
 				console.log('nnn', newTop)
 			}
-		}.bind(this), 30)
+		}.bind(this), 25)
 	}
 	onAniSlowTopEnd(tag) {
 		setTimeout(function() {
 			this.inSlowAni = false
-			// clog('slow ani')
 		}.bind(this), 80)
 	}
 
