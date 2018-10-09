@@ -23,3 +23,6 @@ export var removeClass = function(elId, cls) {
 	}
 	el.className = el.className.replace(cls, "")
 }
+
+
+

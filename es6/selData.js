@@ -71,8 +71,8 @@ class SelData {
 			this.selTagAry[bId] = tag
 		}
 
-		console.log('set val',bId, this.selValAry)
-		console.log('set tag', this.selTagAry)
+		// console.log('set val',bId, this.selValAry)
+		// console.log('set tag', this.selTagAry)
 	}
 
 	// 获取多级选择器选择列表

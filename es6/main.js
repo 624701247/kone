@@ -31,7 +31,7 @@ export var init = function(data, bNum) {
 
 	var str = ''
 	str += `
-	<div class="sarea">
+	<div id="sarea" class="sarea">
 		<div class="sarea-hd">
 			<span id="btn-area-cancel" class="btn">取消</span>
 			<span id="btn-area-ok" class="btn">确认</span>
@@ -106,6 +106,38 @@ export var open = function(ary) {
 	}
 
 	selScroll.updateList()
+
+
+	// ktest
+	// document.getElementById('cont-sarea').addEventListener("touchstart", function(e) {
+	// 	clog('1')
+ //        if(isInScroll) {
+ //        	// clog('1')
+ //        }
+ //        else {
+ //        	// e.preventDefault();
+ //        }
+ //    }, true);
+
+ //    document.getElementById('cont-sarea').addEventListener("touchmove", function(e) {
+ //    	clog('2')
+ //        if(isInScroll) {
+ //        	// clog('2')
+ //        }
+ //        else {
+ //        	// e.preventDefault();
+ //        }
+ //    }, true);
+
+    // document.getElementById('sarea').addEventListener("touchstart", function(e) {
+    // 	clog('3')
+    //     isTouchSel = true
+    // }, false);
+
+    // document.getElementById('sarea').addEventListener("touchmove", function(e) {
+    // 	clog('4')
+    //     // isTouchSel = false
+    // }, false);
 }
 
 //step 4 关闭选择器

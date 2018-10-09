@@ -8,7 +8,7 @@
 	<!-- 引入插件 -->
 	<script src="public/areaData.js" type="text/javascript" charset="utf-8"></script>
 	<script src="public/sarea.js" type="text/javascript" charset="utf-8"></script>	
-	<link rel="stylesheet" href="css/sarea.css?1">
+	<link rel="stylesheet" href="css/sarea.css">
 
 	<script>
 		/* 宽适配 
@@ -39,27 +39,82 @@
 
 <script>
 
-	/*一级联动 eg:
+	/*一级联动 eg:*/
+	var wh = {res:'cx_wh', date: '2018年10月9日-10月28日', area:'湖北、河南地区门店'}
+    var gz = {res:'cx_gz', date: '2018年10月9日-10月31日', area:'广东、广西、湖南、江西、海南、福建、山西省门店'}
+    var cq = {res:'cx_cq', date: '2018年10月11日-10月25日', area:'重庆、贵州、新疆、四川南充/达州/广安地区门店'}
+    var xa = {res:'cx_xa', date: '2018年10月8日-10月28日', area:'陕西、甘肃、宁夏、青海地区门店'}
+    var sc = {res:'cx_sc', date: '2018年10月8日-10月31日', area:'四川（达州/南充/广安除外）、云南、西藏地区门店'}
+    var sy = {res:'cx_sy', date: '2018年10月8日-10月28日', area:'辽宁、吉林、黑龙江地区门店'}
+    var sh = {res:'cx_sh', date: '2018年10月8日-10月31日', area:'江苏、浙江、安徽、上海地区门店'}
+    var shopData = {
+        '安徽':sh,
+        '北京':1,
+        '重庆':cq,
+        '福建':gz,
+        '广东':gz,
+        '甘肃':xa,
+        '广西':gz,
+        '贵州':cq,
+        '湖北':wh,
+        '河北':1,
+        '黑龙江':sy,
+        '海南':gz,
+        '湖南':gz,
+        '河南':wh,
+        '吉林':sy,
+        '江苏':sh,
+        '江西':gz,
+        '辽宁':sy,
+        '内蒙古（除乌海、鄂尔多斯、巴彦淖尔）':1,
+        '内蒙古（乌海、鄂尔多斯、巴彦淖尔）':1,
+        '宁夏':xa,
+        '青海':xa,
+        '四川（除南充、达州、广安）':sc,
+        '四川（南充、达州、广安）':cq,
+        '山东':1,
+        '上海':1,
+        '山西':gz,
+        '陕西':xa,
+        '天津':1,
+        '西藏':sc,
+        '新疆':cq,
+        '云南':sc,
+        '浙江':sh
+    }
 	var jobData = {
-		'前端':1,
-		'后端':2,
-		'美工':3,
-		'策划':4,
-		'老板':5,
-		'董事长':6,
-		'A':7,
-		'B':8,
-		'C':9,
-		'D':10,
+		'111111':1,
+		'222222':2,
+		'333333':3,
+		'444444':4,
+		'555555':5,
+		'666666':6,
+		'7777777':7,
+		'88888888888':8,
+		'999999999999':9,
+		'1010101010110101':10,
+		'asfasf':1,
+		'啊沙发上':1,
+		'士大夫':1,
+		'asfasf':1,
+		'士大夫':1,
+		'asfasf':1,
+		'asfasf':1,
+		'二':1,
+		'打光棍吧':1,
+		'asfasf':1,
+		'阿斯顿发生':1,
+		'sdfs ':1,
+		'asfasf':1,
 	}
-	sarea.init(jobData, 1)
+	sarea.init(shopData, 1)
 	sarea.addSelEventListener(function(data) {
 		console.log(data)
 	})
 	document.getElementById('btn-1').onclick = function() {
 		sarea.open()	
 	}
-	*/
+	
 	/*end of */
 
 	/*二级联动 eg: 
@@ -93,16 +148,16 @@
 
 
 
-	/*三级联动 eg:*/
+	/*三级联动 eg:
 	sarea.init(areaData, 3)  //areaData 地区选择
 	sarea.addSelEventListener(function(data) {
 		console.log('sel', data)
 	})
 	document.getElementById('btn-1').onclick = function() {
-		sarea.open(['香港'])
+		// sarea.open(['香港'])
 
-		// sarea.open(['天津', '县', '武清县'])	
-	}
+		sarea.open(['天津', '县', '武清县'])	
+	}*/
 	/*end of */ 
 
 
@@ -137,6 +192,96 @@
 </script>
 
 
+<script>
+/*以上方法能解决问题，但是有个缺陷：
+bgTag 标签内的标签若使用onclick注册点击事件则会无法响应。  比如 ：   <img id="btn" src="btn.png"  onclick="onClickBtn()" />
+
+*/
+
+
+//去除整个画面能滚动回弹
+//@param bgTag : 想要设置其为不可滚动回弹的标签
+//@param scrollTag : bgTag标签中特殊需要可滚动的标签
+function killRollback(bgTag, scrollTag) {
+	var j = {};
+    var istTouchSv = false
+    var touchSY = 0
+    var scrollJTag = "#" + scrollTag
+    document.getElementById(bgTag).addEventListener("touchstart", function(e) {
+        if(istTouchSv) {
+            touchSY = e.touches[0].pageY; 
+        }
+        else {
+           e.preventDefault();  //取消与事件关联的默认动作
+        }
+    }, false);
+
+    document.getElementById(bgTag).addEventListener("touchmove", function(e) {
+        if(istTouchSv) {
+            if(e.touches[0].pageY > touchSY) {  //往下滑
+                if(j(scrollJTag).scrollTop() == 0) {   //滑到顶部
+                   e.preventDefault();
+                }
+            }
+            else { //往上滑
+                if(j(scrollJTag)[0].scrollTop + j(scrollJTag).height() >= j(scrollJTag)[0].scrollHeight - 5) {   //滑到底部  //注意 有些设备nScrollTop不精准 （比如叫兽的小米） 所以这里  - 5
+                   e.preventDefault();  
+                } 
+
+            }
+        }
+        else {
+           e.preventDefault();  //取消与事件关联的默认动作
+        }
+    }, false);
+
+
+    document.getElementById(scrollTag).addEventListener("touchstart", function(e) {
+        istTouchSv = true
+    }, false);
+    document.getElementById(scrollTag).addEventListener("touchend", function(e) {
+        istTouchSv = false
+    }, false);
+}
+// killRollback("maindiv", "scrolldiv")
+
+
+
+var isInScroll = false 
+
+// 
+var el_clog = null
+var clog = function(txt) {
+    if(typeof(txt) == 'object') {
+        txt = JSON.stringify(txt);
+    }
+
+    
+    if(el_clog == null) {
+        el_clog = document.createElement('div')
+        el_clog.style.cssText = "position:absolute; z-index:9999; color:red; font-size: 0.4rem;word-break: break-all;"
+        document.body.appendChild(el_clog)
+    }
+
+    el_clog.innerHTML += (txt + ' ` ')
+}
+
+</script>
+
+
 </body>
 </html>
 
+
+<!-- 
+
+九月份工时：
+南航-b2c裂变红包     28小时
+南航-意大利碎片     simon交接过来的，修改7小时
+珀莱雅-李易峰笑容站  18小时
+AEG-美裳呵护+健康生活共H5   开发18小时 修改3小时
+三星Galaxy Watch H5   开发6小时 修改4小时  
+
+
+
+ -->
