@@ -68,14 +68,17 @@ export class SelScroll {
 		// console.log('start screenX', ev.targetTouches[0].screenY)  //相对于设备屏幕
 		// console.log('start pageX', ev.targetTouches[0].pageY) // ??
 		// console.log('start pageX', ev.targetTouches[0].clientY) // ??
+		// clog('多操作' + ev.changedTouches.length)
 
 		ev.preventDefault();
 		if(this.inSlowAni) {
 			return
 		}
-
-		this.inSlowAni = true
 		this.inTouch = true
+
+		// kone todo 屏蔽多指操作
+		// if(ev.changedTouches.length > 1) {
+		// }
 
 		var touch = ev.changedTouches[0]
 		this.startTimeStamp = ev.timeStamp
@@ -102,13 +105,13 @@ export class SelScroll {
 		var touch = ev.changedTouches[0]
 		var timeDif = Math.abs(ev.timeStamp - this.startTimeStamp) //时间差值
 		var destDif = Math.abs(touch.clientY - this.startClientY) //位置差值
-		// console.log('timeDif', timeDif)
+		// clog('timeDif'+ timeDif)
 		// console.log('destDif', destDif, this.itemHei)
-		if(timeDif < 300 &&  destDif < this.itemHei) {
+		if(timeDif < 250 &&  destDif < this.itemHei) {
 			// clog('点击') //kone todo
 			this.drag(ev, true)
 		}
-		else if(timeDif < 400 && destDif >= this.itemHei * 2) { //kone todo
+		else if(timeDif < 300 && destDif >= this.itemHei * 2) { //kone todo
 			var dir;
 			// console.log(touch.clientY, this.startClientY)
 			if(touch.clientY > this.startClientY) {
@@ -119,7 +122,13 @@ export class SelScroll {
 				// clog('往上滑动')
 				dir = 1
 			}
-			this.slide(ev, dir, timeDif / 400)
+
+			// var rate = 100 - Math.ceil(timeDif / 400 * 100) 
+			var tt = 1 - (timeDif / 300)            // 0 -- 1 慢 -- 快
+			var dd = destDif / (this.itemHei * 10)  // 0 -- 1 短 -- 长
+			var rate = Math.ceil(dd * tt * 100)
+			// clog('rate' + rate)
+			this.slide(ev, dir, rate)
 		}
 		else {
 			// clog('拖动')
@@ -149,10 +158,10 @@ export class SelScroll {
 	}
 
 	// 滑动操作
-	// @param rate : 0 -- 1 开区间 
+	// @param rate : 0 -- 100 开区间 
 	slide(ev, dir, rate) {
 		var target = ev.currentTarget//this.el_cont
-		var distTop = target.scrollTop + dir * this.maxTop * (1 - rate)
+		var distTop = target.scrollTop + dir * this.maxTop * rate / 100
 		if(distTop < 0) {
 			distTop = 0
 		}
@@ -177,7 +186,6 @@ export class SelScroll {
 			if(count <= 0) {
 				newTop = distTop
 				isEnd = true
-				// clog('sl ide end')
 			}
 			target.scrollTop = newTop
 
@@ -193,7 +201,7 @@ export class SelScroll {
 	// @param target : 动画dom对象
 	// @param endTop : 动画结束位置
 	aniSlowTop(target) {
-		// this.inSlowAni = true
+		this.inSlowAni = true
 
 		//  更新选中数据 跟 子列表
 		var info = this.getCurSelInfo()
@@ -206,7 +214,6 @@ export class SelScroll {
 		// var target = this.el_cont
 		var endTop = info.tag * this.itemHei
 
-		console.log('sss', target.scrollTop, endTop)
 		if(target.scrollTop == endTop) {
 			this.onAniSlowTopEnd()
 			console.log(' == ')
@@ -237,11 +244,9 @@ export class SelScroll {
 				clearInterval(this.slowAniTimer)
 				this.slowAniTimer = null 			 	
 			 	this.onAniSlowTopEnd()
-			 	console.log('eeeee')
 			}
 			else {
 				target.scrollTop = newTop
-				console.log('nnn', newTop)
 			}
 		}.bind(this), 25)
 	}

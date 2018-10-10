@@ -7,7 +7,7 @@
 
 	<!-- 引入插件 -->
 	<script src="public/areaData.js" type="text/javascript" charset="utf-8"></script>
-	<script src="public/sarea.js" type="text/javascript" charset="utf-8"></script>	
+	<script src="public/sarea.js?13" type="text/javascript" charset="utf-8"></script>	
 	<link rel="stylesheet" href="css/sarea.css">
 
 	<script>
@@ -160,95 +160,10 @@
 	}*/
 	/*end of */ 
 
-
-	// ktest
-	// function kkk(keyAry) {
-	// 	let data = areaData;
-	// 	for(let idx = 1; idx < keyAry.length; idx++) {
-	// 		let key = keyAry[idx]
-	// 		if(data[key] && data[key].items) {
-	// 			data = data[key].items
-	// 		}
-	// 		else {
-	// 			break
-	// 		}
-	// 	}
-	// 	return data
-	// }
-	// console.log( kkk('', '北京') )
-	// let ary = ['', '北京', '11']
-	// //没有设置的，默认选中第一项
-	// let needDefNum = 3 - (ary.length - 1)
-	// if(needDefNum > 0) {   
-	// 	let tmpData = this.getValByKeyAry(ary)
-	// 	for(let idx = 0; idx < needDefNum; idx++) {
-	// 		for(let key in tmpData) {
-	// 			ary.push(key)
-	// 			tmpData = tmpData[key].items
-	// 			break
-	// 		}
-	// 	}
-	// }
 </script>
 
 
 <script>
-/*以上方法能解决问题，但是有个缺陷：
-bgTag 标签内的标签若使用onclick注册点击事件则会无法响应。  比如 ：   <img id="btn" src="btn.png"  onclick="onClickBtn()" />
-
-*/
-
-
-//去除整个画面能滚动回弹
-//@param bgTag : 想要设置其为不可滚动回弹的标签
-//@param scrollTag : bgTag标签中特殊需要可滚动的标签
-function killRollback(bgTag, scrollTag) {
-	var j = {};
-    var istTouchSv = false
-    var touchSY = 0
-    var scrollJTag = "#" + scrollTag
-    document.getElementById(bgTag).addEventListener("touchstart", function(e) {
-        if(istTouchSv) {
-            touchSY = e.touches[0].pageY; 
-        }
-        else {
-           e.preventDefault();  //取消与事件关联的默认动作
-        }
-    }, false);
-
-    document.getElementById(bgTag).addEventListener("touchmove", function(e) {
-        if(istTouchSv) {
-            if(e.touches[0].pageY > touchSY) {  //往下滑
-                if(j(scrollJTag).scrollTop() == 0) {   //滑到顶部
-                   e.preventDefault();
-                }
-            }
-            else { //往上滑
-                if(j(scrollJTag)[0].scrollTop + j(scrollJTag).height() >= j(scrollJTag)[0].scrollHeight - 5) {   //滑到底部  //注意 有些设备nScrollTop不精准 （比如叫兽的小米） 所以这里  - 5
-                   e.preventDefault();  
-                } 
-
-            }
-        }
-        else {
-           e.preventDefault();  //取消与事件关联的默认动作
-        }
-    }, false);
-
-
-    document.getElementById(scrollTag).addEventListener("touchstart", function(e) {
-        istTouchSv = true
-    }, false);
-    document.getElementById(scrollTag).addEventListener("touchend", function(e) {
-        istTouchSv = false
-    }, false);
-}
-// killRollback("maindiv", "scrolldiv")
-
-
-
-var isInScroll = false 
-
 // 
 var el_clog = null
 var clog = function(txt) {
