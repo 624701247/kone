@@ -1,6 +1,7 @@
 import * as utils from "./utils"
 
-import {selData} from "./selData"
+import {selData} from "./SelData"
+import {selDataV2} from "./SelDataV2"
 
 import {SelScroll} from "./SelScroll"
 
@@ -55,15 +56,67 @@ export var init = function(data, bNum) {
 
 	// 取消按钮
 	document.querySelector('#btn-area-cancel').onclick = function() {
-		// console.log('cccc')
 		close()
 	}
 
 	// 确定按钮
 	document.querySelector('#btn-area-ok').onclick = function() {
 		var ev = new Event('onSel')
-		ev.data = selData.getAllSelVal() // kone todo 优化
-		// ev.data = selScroll.getAllSelName()
+		ev.data = selData.getAllSelVal()
+		el_cont.dispatchEvent(ev)
+		close()
+	}
+}
+
+/* 没有 
+data = [
+	{
+		'1991':1,
+	},
+	{
+		'12':1,
+	},
+	{
+		'10':1,
+	},
+]
+*/
+export var initV2 = function(data) {
+	selDataV2.setData(data)
+
+	var str = ''
+	str += `
+	<div id="sarea" class="sarea">
+		<div class="sarea-hd">
+			<span id="btn-area-cancel" class="btn">取消</span>
+			<span id="btn-area-ok" class="btn">确认</span>
+		</div>
+
+		<div class="sarea-bd">
+			<div id="selmask" class="selmask"></div>
+		</div>
+	</div>
+	`
+	// 
+	let contClsName = "cont-sarea" 
+	let node = document.createElement("div");
+	node.className = contClsName
+	node.id = contClsName
+	document.body.appendChild(node)
+	initEm(node)
+	node.innerHTML = str
+
+	el_cont = document.getElementById(contClsName);
+
+	// 取消按钮
+	document.querySelector('#btn-area-cancel').onclick = function() {
+		close()
+	}
+
+	// 确定按钮
+	document.querySelector('#btn-area-ok').onclick = function() {
+		var ev = new Event('onSel')
+		ev.data = selDataV2.getAllSelVal()
 		el_cont.dispatchEvent(ev)
 		close()
 	}
@@ -99,45 +152,34 @@ export var open = function(ary) {
 	if(selScroll == null) {
 		selData.initSelAry(ary)
 		let el_blockBd = el_cont.querySelector('.sarea-bd')
-		selScroll = new SelScroll(el_blockBd, selData.getBlockNum() - 1, 1)
+		selScroll = new SelScroll(el_blockBd, selData.getBlockNum() - 1, 1, true)
 	}
 	else if(ary) {
 		selData.initSelAry(ary)
 	}
 
 	selScroll.updateList()
+}
 
+//step 3 打开选择器
+// @param ary : 默认选中的id
+export var openV2 = function(ary) {
+	if(el_cont == null) {
+		console.error('sarea 还没初始化')
+		return
+	}
 
-	// ktest
-	// document.getElementById('cont-sarea').addEventListener("touchstart", function(e) {
-	// 	clog('1')
- //        if(isInScroll) {
- //        	// clog('1')
- //        }
- //        else {
- //        	// e.preventDefault();
- //        }
- //    }, true);
+	utils.addClass(el_cont, showContClsName) 
+	if(selScroll == null) {
+		selDataV2.initSelAry(ary)
+		let el_blockBd = el_cont.querySelector('.sarea-bd')
+		selScroll = new SelScroll(el_blockBd, selDataV2.getBlockNum() - 1, 1, false)
+	}
+	else if(ary) {
+		selDataV2.initSelAry(ary)
+	}
 
- //    document.getElementById('cont-sarea').addEventListener("touchmove", function(e) {
- //    	clog('2')
- //        if(isInScroll) {
- //        	// clog('2')
- //        }
- //        else {
- //        	// e.preventDefault();
- //        }
- //    }, true);
-
-    // document.getElementById('sarea').addEventListener("touchstart", function(e) {
-    // 	clog('3')
-    //     isTouchSel = true
-    // }, false);
-
-    // document.getElementById('sarea').addEventListener("touchmove", function(e) {
-    // 	clog('4')
-    //     // isTouchSel = false
-    // }, false);
+	selScroll.updateList()
 }
 
 //step 4 关闭选择器

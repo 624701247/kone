@@ -1,5 +1,7 @@
 import * as utils from "./utils"
-import {selData} from "./selData"
+
+import {selData} from "./SelData"
+import {selDataV2} from "./SelDataV2"
 
 
 var createBlockStr = function(idName) {
@@ -13,17 +15,26 @@ var createBlockStr = function(idName) {
 export class SelScroll {
 
 	// @param el_parent : 父节点dom对象
+	// @param isAss: 是否是联动的
 	// @param childNum: 子项数量
 	// @param bId : 第 n 级   从 1 开始
-	constructor(el_parent, childNum, bId) {
+	constructor(el_parent, childNum, bId, isAss) {
 		let node = createBlockStr('block-' + bId)
 		el_parent.appendChild(node)
 
 		this.bId = bId
 		this.listData = null
+		this.isAss = isAss
+		if(isAss) {
+			this.slData = selData
+		}
+		else {
+			this.slData = selDataV2
+		}
+		
 
 		if(childNum > 0) {
-			this.subSelScroll = new SelScroll(el_parent, childNum - 1, bId + 1)
+			this.subSelScroll = new SelScroll(el_parent, childNum - 1, bId + 1, this.isAss)
 		}
 		else {
 			this.subSelScroll = null
@@ -31,32 +42,21 @@ export class SelScroll {
 
 		// 
 		this.el_cont = node
-		// this.el_cont.onscroll = this.onScroll.bind(this)
-
-
 
 		this.el_list = this.el_cont.querySelector('.sarea-list')
 
 		this.el_items = null //项目列表
 		this.itemHei = null  //项目高度
 
-		// this.scTimer = null
-
 		this.slowAniTimer = null  //缓动停下动画定时器
 		this.inSlowAni = false    //缓动停下动画中，请等待
 
 		this.inTouch = false  //是否在触摸操作中
-
-		// this.curTop = 0
 		this.maxTop = 0 //可以设置的最高 scrollTop值  设置超过该值得到结果是 scrollTop为该值
-
-		// this.curTag = 0 //当前第一项的id 从0开始
-
 
 		this.startTimeStamp = 0 //触摸开始时间戳
 		this.startClientY = 0   //触摸开始y坐标
 		this.curMoveClientY = 0 //移动中y坐标
-		// this.endTimeStamp = 0  //触摸结束时间戳
 
 		this.el_cont.addEventListener("touchstart", this.onTouchStart.bind(this), true);
 	    this.el_cont.addEventListener("touchmove", this.onTouchMove.bind(this), false);
@@ -105,15 +105,12 @@ export class SelScroll {
 		var touch = ev.changedTouches[0]
 		var timeDif = Math.abs(ev.timeStamp - this.startTimeStamp) //时间差值
 		var destDif = Math.abs(touch.clientY - this.startClientY) //位置差值
-		// clog('timeDif'+ timeDif)
-		// console.log('destDif', destDif, this.itemHei)
 		if(timeDif < 250 &&  destDif < this.itemHei) {
 			// clog('点击') //kone todo
 			this.drag(ev, true)
 		}
 		else if(timeDif < 300 && destDif >= this.itemHei * 2) { //kone todo
 			var dir;
-			// console.log(touch.clientY, this.startClientY)
 			if(touch.clientY > this.startClientY) {
 				// clog('往下滑动')
 				dir = -1
@@ -195,7 +192,6 @@ export class SelScroll {
 			}
 
 		}.bind(this), 25)
-
 	}
 
 	// @param target : 动画dom对象
@@ -205,13 +201,12 @@ export class SelScroll {
 
 		//  更新选中数据 跟 子列表
 		var info = this.getCurSelInfo()
-		selData.setSel(this.bId, info.tag, info.name)
-		if(this.subSelScroll) {
+		this.slData.setSel(this.bId, info.tag, info.name)
+		if(this.subSelScroll && this.isAss) {
 			this.subSelScroll.updateList()
 		}
-		console.log('cur sel info', this.bId, info.tag, info.name)
+		// console.log('级数，列表下表，列表值', this.bId, info.tag, info.name)
 
-		// var target = this.el_cont
 		var endTop = info.tag * this.itemHei
 
 		if(target.scrollTop == endTop) {
@@ -261,11 +256,9 @@ export class SelScroll {
 		utils.removeClass(this.el_cont, 'block-stop')
 		this.el_cont.scrollTop = 0
 		this.maxTop = this.el_list.clientHeight - this.el_cont.clientHeight
-		// console.log(this.maxTop, 'max')
 	}
 
 	setCurSel(curIdx) {
-		// console.log('curIdx', curIdx)
 		this.el_cont.scrollTop = (curIdx) * this.itemHei
 	}
 
@@ -289,9 +282,9 @@ export class SelScroll {
 		return '<li id="sarea-item-' + id + '" class="sarea-item sarea-item-' + this.bId + '">' + val + '</li>'
 	}
 
-	// 
+	//更新列表内容
 	updateList() {
-		this.listData = selData.getListDataById(this.bId)
+		this.listData = this.slData.getListDataById(this.bId)
 		this.addList()
 
 		this.el_items = this.el_list.getElementsByClassName('sarea-item')
@@ -302,8 +295,8 @@ export class SelScroll {
 		this.updateMaxTop()
 
 
-		let val = selData.getSelValById(this.bId)
-		let tag = selData.getTagByKey(this.listData, val)
+		let val = this.slData.getSelValById(this.bId)
+		let tag = this.slData.getTagByKey(this.listData, val)
 		this.setCurSel(tag)
 
 		if(this.subSelScroll) {

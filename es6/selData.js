@@ -1,3 +1,7 @@
+/*
+联动选择数据
+格式参考 areaData
+*/ 
 
 class SelData {
 	constructor() {
@@ -19,7 +23,7 @@ class SelData {
 	// 
 	initSelAry(ary) {
 		ary = ary || []
-			ary.splice(0, 0, '');
+		ary.splice(0, 0, '');
 		
 		//没有设置的，默认选中第一项
 		let needDefNum = this.blockNum - (ary.length - 1)
@@ -35,12 +39,14 @@ class SelData {
 		}
 
 		this.selValAry = ary
-
 		this.selTagAry = []
+		
 		for(let idx = 0; idx < this.selValAry.length; idx++) {
 			this.selTagAry.push(-1)
 		}
-	 	// console.log('init', this.selValAry)
+
+		console.log('this.selValAry', this.selValAry)
+		console.log('this.selTagAry', this.selTagAry)
 	}
 
 	setSel(bId, tag, val) {
@@ -109,7 +115,6 @@ class SelData {
 		for(let idx = 0; idx < bId; idx++)  {
 			keyAry.push(this.selValAry[idx])
 		}
-		// console.log('aa' , keyAry)
 		return this.getValByKeyAry(keyAry)
 	}
 
@@ -134,3 +139,4 @@ class SelData {
 	}
 }
 export var selData = new SelData()
+
