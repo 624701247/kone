@@ -29,15 +29,19 @@ var initEm = function(el) {
 // @param bNum: 选择器级数
 export var init = function(data, bNum) {
 	selData.setData(data, bNum)
+	selScroll = null
+	let el = document.getElementById('curSarea')
+	if(el) {
+		el.remove()
+	}
 
 	var str = ''
 	str += `
-	<div id="sarea" class="sarea">
+	<div id="curSarea" class="sarea">
 		<div class="sarea-hd">
 			<span id="btn-area-cancel" class="btn">取消</span>
 			<span id="btn-area-ok" class="btn">确认</span>
 		</div>
-
 		<div class="sarea-bd">
 			<div id="selmask" class="selmask"></div>
 		</div>
@@ -83,10 +87,15 @@ data = [
 */
 export var initV2 = function(data) {
 	selDataV2.setData(data)
+	selScroll = null
+	var el = document.getElementById("cont-sarea")
+	if(el) {
+		el.remove()
+	}
 
 	var str = ''
 	str += `
-	<div id="sarea" class="sarea">
+	<div id="curSarea" class="sarea">
 		<div class="sarea-hd">
 			<span id="btn-area-cancel" class="btn">取消</span>
 			<span id="btn-area-ok" class="btn">确认</span>
