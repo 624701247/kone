@@ -13,6 +13,7 @@ class SelDataV2 {
 	setData(listData) {
 		this.listData = listData
 		this.blockNum = this.listData.length
+		// console.log('aa', this.listData)
 	}
 
 	getBlockNum() {
@@ -38,7 +39,21 @@ class SelDataV2 {
 
 	// 获取多级选择器选择列表
 	getAllSelVal() {
-		return this.selValAry
+		// kone todo 只有一个的情况
+		var count = 0
+		var singleSel = ''
+		for(var key in this.listData[0]) {
+			count++
+			singleSel = key
+		}
+		// console.log(singleSel, count, 'sf')
+		if(count == 1) {
+			return ['', singleSel]
+		}
+		else {
+			return this.selValAry
+		}
+		
 	}
 
 	// 
