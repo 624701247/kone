@@ -35,13 +35,13 @@
 <body>
 
 <div id="btn-1" class="btn btn-1" style="width:4em;height:4em;background:red;"></div>
-<div id="btn-2" class="btn btn-2" style="width:4em;height:4em;background:yellow;"></div>
+<!-- <div id="btn-2" class="btn btn-2" style="width:4em;height:4em;background:yellow;"></div> -->
 
 
 <script>
 
 
-	/*一级联动 eg:*/
+	/*一级联动 eg:
 	as = {}
 	as.sexAry = [{
         // '男':1,
@@ -75,7 +75,7 @@
 		    console.log('222222curSel', data)
 	    })
         sarea.openV2(['1990年', '1月', '1日'])	
-	}
+	}*/
 	/*end of */
 
 	/*一级联动 eg:
@@ -144,16 +144,16 @@
 
 
 
-	/*三级联动 eg:
-	sarea.init(areaData, 3)  //areaData 地区选择
-	sarea.addSelEventListener(function(data) {
-		console.log('sel', data)
-	})
+	/*三级联动 eg:*/
 	document.getElementById('btn-1').onclick = function() {
 		// sarea.open(['香港'])
-
-		sarea.open(['天津', '县', '武清县'])	
-	}*/
+		sarea.init(areaData, 3)  //areaData 地区选择
+		sarea.addSelEventListener(function(data) {
+			console.log('sel', data)
+		})
+		// sarea.open(['天津', '县', '武清县'])	
+		sarea.open()	
+	}
 	/*end of */ 
 
 </script>

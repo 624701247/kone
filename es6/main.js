@@ -30,7 +30,7 @@ var initEm = function(el) {
 export var init = function(data, bNum) {
 	selData.setData(data, bNum)
 	selScroll = null
-	let el = document.getElementById('curSarea')
+	let el = document.getElementById('cont-sarea')
 	if(el) {
 		el.remove()
 	}
