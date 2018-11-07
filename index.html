@@ -10,17 +10,6 @@
 	<script src="public/sarea.js?13" type="text/javascript" charset="utf-8"></script>	
 	<link rel="stylesheet" href="css/sarea.css">
 
-	<script>
-		/* 宽适配 
-		改下单位，使到不用宽适配7.5rem的项目也能用
-		使用 em 代替 rem 搞定！
-		*/
-        // var CW_REM = 7.5
-        // var CH = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        // var CW = Math.min( window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth, CH * 1.4 ); 
-        // var CH_REM = CH / CW * CW_REM
-        // document.documentElement.style.fontSize = (CW / CW_REM) + 'px';
-	</script>
 	<style>
 	html, body {
 	    margin: 0;
@@ -29,54 +18,86 @@
 	    width:100%;
 	    background-color: #23272A;
 	}
-
+	.btn {
+		width:5em;height:4em;
+		line-height: 4rem;
+	}
 	</style>
 </head>
 <body>
 
-<div id="btn-1" class="btn btn-1" style="width:4em;height:4em;background:red;"></div>
-<!-- <div id="btn-2" class="btn btn-2" style="width:4em;height:4em;background:yellow;"></div> -->
+<div id="btn-1" class="btn" style="background:red;">一级</div>
+<div id="btn-2" class="btn" style="background:yellow;">无联动三级</div>
+<div id="btn-3" class="btn" style="background:green;">联动二级</div>
 
 
 <script>
-
-
-	/*一级联动 eg:
+	/*无联动一级*/
 	as = {}
 	as.sexAry = [{
-        // '男':1,
-        '女':2
+        '男':1,
+        '女':2,
+        '人妖':3
     }]
+    document.getElementById('btn-1').onclick = function() {
+		sarea.initV2(as.sexAry)
+        sarea.addSelEventListener(function(data) {
+		    console.log('on sel', data)
+	    })
+        sarea.openV2(['女'])	
+        // sarea.openV2()	
+	}
+
+	/*无联动三级 （生日选择）*/
     var day = []
     var mon = []
     var year = []
-    for(var idx = 1; idx <= 31; idx++) {
-        day[idx + '日'] = idx
+    for(var ii = 1; ii <= 31; ii++) {
+        day[ii + '日'] = ii
     }
     for(var idx = 1; idx <= 12; idx++) {
         mon[idx + '月'] = idx
     }
-    for(var idx = 1960; idx <= 2018; idx++) {
-        year[idx + '年'] = idx
+    for(var jj = 1960; jj <= 2018; jj++) {
+        year[jj + '年'] = jj
     }
-    as.bothAty = [
-        year, mon, day
-    ]
-	document.getElementById('btn-1').onclick = function() {
-		sarea.initV2(as.sexAry)
-        sarea.addSelEventListener(function(data) {
-		    console.log('11111curSel', data)
-	    })
-        sarea.openV2(['男'])	
-	}
+    as.bothAty = [year, mon, day]
 	document.getElementById('btn-2').onclick = function() {
 		sarea.initV2(as.bothAty)
         sarea.addSelEventListener(function(data) {
-		    console.log('222222curSel', data)
+		    console.log('on sel', data)
 	    })
-        sarea.openV2(['1990年', '1月', '1日'])	
-	}*/
-	/*end of */
+        sarea.openV2()	
+	}
+	
+
+	/*联动二级*/ 
+	var foodData = {
+		'菜': {
+			id: 0,
+			items: {
+				'白菜':1,
+				'芥蓝':2,
+				'花菜':3
+			}
+		}
+		,'肉': {
+			id: 1,
+			items: {
+				'牛肉':1,
+				'猪肉':2,
+				'鸡肉':3
+			}
+		}
+	}
+    document.getElementById('btn-3').onclick = function() {
+		sarea.initV2(foodData, 2)
+        sarea.addSelEventListener(function(data) {
+		    console.log('on sel', data)
+	    })
+        sarea.openV2()	
+	}
+
 
 	/*一级联动 eg:
 	var jobData = {
@@ -144,7 +165,7 @@
 
 
 
-	/*三级联动 eg:*/
+	/*三级联动 eg:
 	document.getElementById('btn-1').onclick = function() {
 		// sarea.open(['香港'])
 		sarea.init(areaData, 3)  //areaData 地区选择
@@ -153,7 +174,7 @@
 		})
 		// sarea.open(['天津', '县', '武清县'])	
 		sarea.open()	
-	}
+	}*/
 	/*end of */ 
 
 </script>

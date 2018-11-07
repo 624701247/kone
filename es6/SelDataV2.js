@@ -2,58 +2,53 @@
 非联动的选择数据
 */ 
 
-class SelDataV2 {
+export class SelDataV2 {
 	constructor() {
-		this.listData;
-		this.blockNum; 
-		this.selValAry;
-		this.selTagAry;
+		this.listData;   //
+		this.blockNum;   //级数
+		this.selValAry;  //当前选中值列表
 	}
 
-	setData(listData) {
+	getIsAss() {
+		return false
+	}
+
+	setData(listData, blockNum) {
 		this.listData = listData
-		this.blockNum = this.listData.length
-		// console.log('aa', this.listData)
+		this.blockNum = blockNum || this.listData.length
+	}
+	getData() {
+		return this.listData
 	}
 
 	getBlockNum() {
 		return this.blockNum
 	}
 
-	// kone todo 
-	initSelAry(ary) {
-		ary = ary || []
-		ary.splice(0, 0, '');
-		this.selValAry = ary
-
-		this.selTagAry = []
-		for(let idx = 0; idx < this.selValAry.length; idx++) {
-			this.selTagAry.push(-1)
+	// @param defAry : 默认选中的值 ['aa', 'bb'],如果传空则默认选择第一个
+	initSelAry(defAry) {
+		defAry = defAry || []
+		for(var idx = 0; idx < this.blockNum; idx++) {
+			if(defAry[idx] && this.listData[idx][defAry[idx]] != null) {
+				continue
+			}
+			else {
+				for(var key in this.listData[idx]) {
+					defAry[idx] = key		
+					break
+				}
+			}
 		}
+		this.selValAry = defAry
 	}
 
 	setSel(bId, tag, val) {
 		this.selValAry[bId] = val
-		this.selTagAry[bId] = tag
 	}
 
 	// 获取多级选择器选择列表
 	getAllSelVal() {
-		// kone todo 只有一个的情况
-		var count = 0
-		var singleSel = ''
-		for(var key in this.listData[0]) {
-			count++
-			singleSel = key
-		}
-		// console.log(singleSel, count, 'sf')
-		if(count == 1) {
-			return ['', singleSel]
-		}
-		else {
-			return this.selValAry
-		}
-		
+		return this.selValAry	
 	}
 
 	// 
@@ -61,27 +56,9 @@ class SelDataV2 {
 		return this.selValAry[bId]
 	}
 
-
-	// 根据数据的key值列表，获取当前级的数据
-	// @param: ['', 'aa', 'bb']
-	// @return : json 
-	getValByKeyAry(keyAry) {
-		let data = this.listData;
-		for(let idx = 1; idx < keyAry.length; idx++) {
-			let key = keyAry[idx]
-			if(data[key] && data[key].items) {
-				data = data[key].items
-			}
-			else {
-				break
-			}
-		}
-		return data
-	}
-
 	//
 	getListDataById(bId) {			
-		return this.listData[bId - 1]
+		return this.listData[bId]
 	}
 
 	// 根据key值获取该项的位置值
@@ -95,14 +72,6 @@ class SelDataV2 {
 		}
 		return count
 	}
-
-	// 获取一个json 对象的第一项 key值
-	getFirstKey(data) {
-		for(let key in data) {
-			return key
-		}
-		return ''
-	}
 }
-export var selDataV2 = new SelDataV2()
+// export var selDataV2 = new SelDataV2()
 

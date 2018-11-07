@@ -1,5 +1,5 @@
 
-export var addClass = function(elId, cls) {
+export function addClass(elId, cls) {
 	cls = ' ' + cls
 	var el = null
 	if(typeof(elId) == "string") {
@@ -12,7 +12,7 @@ export var addClass = function(elId, cls) {
 		el.className += cls
 	}
 }
-export var removeClass = function(elId, cls) {
+export function removeClass(elId, cls) {
 	cls = ' ' + cls
 	var el = null
 	if(typeof(elId) == "string") {
@@ -22,6 +22,14 @@ export var removeClass = function(elId, cls) {
 		el = elId
 	}
 	el.className = el.className.replace(cls, "")
+}
+
+// 获取一个json 对象的第一项 key值
+export function getFirstKey(data) {
+	for(let key in data) {
+		return key
+	}
+	return ''
 }
 
 

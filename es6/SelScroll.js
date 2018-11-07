@@ -15,26 +15,20 @@ var createBlockStr = function(idName) {
 export class SelScroll {
 
 	// @param el_parent : 父节点dom对象
-	// @param isAss: 是否是联动的
-	// @param childNum: 子项数量
-	// @param bId : 第 n 级   从 1 开始
-	constructor(el_parent, childNum, bId, isAss) {
-		let node = createBlockStr('block-' + bId)
+	// @param bId : 第 n 级   从 0 开始
+	constructor(el_parent, slData, bId) {
+		this.bId = bId || 0
+		this.listData = null
+		this.slData = slData
+		this.isAss = slData.getIsAss() //是否是联动的
+
+		let node = createBlockStr('block-' + this.bId)
 		el_parent.appendChild(node)
 
-		this.bId = bId
-		this.listData = null
-		this.isAss = isAss
-		if(isAss) {
-			this.slData = selData
-		}
-		else {
-			this.slData = selDataV2
-		}
 		
-
+		var childNum = this.slData.getBlockNum() - this.bId - 1
 		if(childNum > 0) {
-			this.subSelScroll = new SelScroll(el_parent, childNum - 1, bId + 1, this.isAss)
+			this.subSelScroll = new SelScroll(el_parent, this.slData, this.bId + 1)
 		}
 		else {
 			this.subSelScroll = null

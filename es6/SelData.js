@@ -3,7 +3,7 @@
 格式参考 areaData
 */ 
 
-class SelData {
+export class SelData {
 	constructor() {
 		this.listData;
 		this.blockNum;
@@ -11,9 +11,16 @@ class SelData {
 		this.selTagAry;
 	}
 
+	getIsAss() {
+		return true
+	}
+
 	setData(listData, blockNum) {
 		this.listData = listData
 		this.blockNum = blockNum
+	}
+	getData() {
+		return this.listData
 	}
 
 	getBlockNum() {
@@ -138,5 +145,5 @@ class SelData {
 		return ''
 	}
 }
-export var selData = new SelData()
+// export var selData = new SelData()
 
