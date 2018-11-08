@@ -197,7 +197,6 @@ export class SelScroll {
 
 		if(target.scrollTop == endTop) {
 			this.onAniSlowTopEnd()
-			console.log(' == ')
 			return 
 		}
 

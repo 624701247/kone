@@ -29,11 +29,18 @@
 
 <div id="btn-1" class="btn" style="background:red;">一级</div>
 <div id="btn-2" class="btn" style="background:yellow;">无联动三级：生日选择器</div>
+<div id="btn-2a" class="btn" style="background:blue;">无联动二级：生日选择器</div>
+
 <div id="btn-3" class="btn" style="background:green;">联动二级</div>
 <div id="btn-4" class="btn" style="background:orange;">联动三级：地区选择器</div>
 
 
 <script>
+	sarea.addSelEventListener(function(data, tag) {
+	    console.log(tag + ' ：sel ', data)
+    })
+
+
 	/*无联动一级*/
 	as = {}
 	as.sexAry = [{
@@ -42,13 +49,11 @@
         '人妖':3
     }]
     document.getElementById('btn-1').onclick = function() {
-		sarea.init(as.sexAry)
-        sarea.addSelEventListener(function(data) {
-		    console.log('on sel', data)
-	    })
+		sarea.init(as.sexAry, null, 'sex')
         sarea.open(['女'])	
         // sarea.open()	
 	}
+
 
 	/*无联动三级 （生日选择）*/
     var day = []
@@ -65,10 +70,12 @@
     }
     as.bothAty = [year, mon, day]
 	document.getElementById('btn-2').onclick = function() {
-		sarea.init(as.bothAty)
-        sarea.addSelEventListener(function(data) {
-		    console.log('on sel', data)
-	    })
+		sarea.init(as.bothAty, null, 'both')
+        sarea.open()	
+	}
+	/*无联动二级：生日选择器*/ 
+	document.getElementById('btn-2a').onclick = function() {
+		sarea.init(as.bothAty, 2, 'both2')
         sarea.open()	
 	}
 	
@@ -93,20 +100,14 @@
 		}
 	}
     document.getElementById('btn-3').onclick = function() {
-		sarea.init(foodData, 2)
-        sarea.addSelEventListener(function(data) {
-		    console.log('on sel', data)
-	    })
+		sarea.init(foodData, 2, 'food')
         sarea.open(['肉'])	
 	}
 
 
-	/*三级联动 */ 
+	/*联动三级：地区选择器 */ 
 	document.getElementById('btn-4').onclick = function() {
-		sarea.init(areaData)
-		sarea.addSelEventListener(function(data) {
-			console.log('on sel', data)
-		})
+		sarea.init(areaData, null, 'area')
 		sarea.open()	
 	}
 

@@ -12,8 +12,9 @@ var contClsName = "cont-sarea"
 var showContClsName = 'cont-sarea-show' //显示容器css 类名
 
 var selDataMgr = null;
-
 var onSelFunc = null;
+var curSelAry = null
+var curDefBlockNum = null
 
 // 
 var initEm = function(el) {
@@ -22,12 +23,37 @@ var initEm = function(el) {
     el.style.fontSize = (cw / cw_em) + 'px';
 }
 
-// 
-export var init = function(data, blockNum) {
-	if(selDataMgr && selDataMgr.getData() == data) {
-		console.log('重复初始化')
-		return 
+
+//添加选中回调函数
+export var addSelEventListener = function(cbFunc, that) {
+	onSelFunc = function(data) {
+		curSelAry = selDataMgr.getAllSelVal()
+		var tag = selDataMgr.getTag()
+		if(that == null) {
+			cbFunc(curSelAry, tag)
+		}
+		else {
+			cbFunc.call(that, curSelAry, tag) 
+		}
+		close()
 	}
+}
+
+// 初始化选择器或者修改选择器数据
+// @param data: 选择器数据
+// @param blockNum: 选择器级数，不传则默认为数据最大层级
+// @param tag: 当前选择器唯一标识
+export var init = function(data, blockNum, tag) {
+	if(selDataMgr && selDataMgr.getData() == data) {
+		if(curDefBlockNum == blockNum) {
+			console.warn('请勿重复初始化sarea')
+			return 
+		}
+	}
+
+	curDefBlockNum = blockNum
+	curSelAry = []
+	selScroll = null
 
 	if(data instanceof Array) {
 		selDataMgr = new SelDataMgr()
@@ -35,8 +61,7 @@ export var init = function(data, blockNum) {
 	else {
 		selDataMgr = new SelAssDataMgr()	
 	}
-	selDataMgr.setData(data, blockNum)
-	selScroll = null
+	selDataMgr.setData(data, blockNum, tag)
 	var el = document.getElementById(contClsName)
 	if(el) {
 		el.remove()
@@ -68,43 +93,18 @@ export var init = function(data, blockNum) {
 	document.querySelector('#btn-area-cancel').onclick = close
 
 	// 确定按钮
-	document.querySelector('#btn-area-ok').onclick = function() {
-		var ev = new Event('onSel')
-		ev.data = selDataMgr.getAllSelVal()
-		el_cont.dispatchEvent(ev)
-		close()
-	}
-}
-
-//添加选中回调函数
-export var addSelEventListener = function(cbFunc, that) {
-	if(el_cont == null) {
-		console.error('sarea 还没初始化')
-		return
-	}
-	if(onSelFunc) {
-		el_cont.removeEventListener('onSel', onSelFunc)
-	}
-	onSelFunc = function(ev) {
-		if(that == null) {
-			cbFunc(ev.data)
-		}
-		else {
-			cbFunc.call(that, ev.data) 
-		}
-	}
-	el_cont.addEventListener('onSel', onSelFunc)
+	document.querySelector('#btn-area-ok').onclick = onSelFunc
 }
 
 //打开选择器
-// @param defAry : 默认选中的值 ['aa', 'bb']
+// @param defAry : 默认选中的值 ['广东', '广州']
 export var open = function(defAry) {
 	if(el_cont == null) {
 		console.error('sarea 还没初始化')
 		return
 	}
 
-	selDataMgr.initSelAry(defAry)
+	selDataMgr.initSelAry(defAry || curSelAry)
 	utils.addClass(el_cont, showContClsName) 
 	if(selScroll == null) {
 		let el_blockBd = el_cont.querySelector('.sarea-bd')

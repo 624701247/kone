@@ -7,18 +7,23 @@ export class SelDataMgr {
 		this.listData;   //
 		this.blockNum;   //级数
 		this.selValAry;  //当前选中值列表
+		this.tag;
 	}
 
 	getIsAss() {
 		return false
 	}
 
-	setData(listData, blockNum) {
+	setData(listData, blockNum, tag) {
 		this.listData = listData
 		this.blockNum = blockNum || this.listData.length
+		this.tag = tag || ''
 	}
 	getData() {
 		return this.listData
+	}
+	getTag() {
+		return this.tag
 	}
 
 	getBlockNum() {

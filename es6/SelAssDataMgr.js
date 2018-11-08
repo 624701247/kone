@@ -9,14 +9,16 @@ export class SelAssDataMgr {
 		this.listData;
 		this.blockNum;
 		this.selValAry;
+		this.tag;
 	}
 
 	getIsAss() {
 		return true
 	}
 
-	setData(listData, blockNum) {
+	setData(listData, blockNum, tag) {
 		this.listData = listData
+		this.tag = tag || ''
 
 		// 默认级数为数据表中最大层级
 		var maxNum = 1;
@@ -36,6 +38,9 @@ export class SelAssDataMgr {
 	}
 	getData() {
 		return this.listData
+	}
+	getTag() {
+		return this.tag
 	}
 
 	getBlockNum() {
