@@ -1,4 +1,6 @@
-# 多级联动选择器插件
+# 多级选择器插件
+
+## kone 2018-11-8
 	areaData.js  //省 市 区 三级联动选择数据
 	sarea.js
     sarea.css
