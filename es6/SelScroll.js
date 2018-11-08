@@ -11,20 +11,21 @@ var createBlockStr = function(idName) {
 export class SelScroll {
 
 	// @param el_parent : 父节点dom对象
-	// @param bId : 第 n 级   从 0 开始
-	constructor(el_parent, slData, bId) {
+	// @slDataMgr ：数据管理类对象
+	// @param bId : 第 n 级   (从 0 开始)
+	constructor(el_parent, slDataMgr, bId) {
 		this.bId = bId || 0
 		this.listData = null
-		this.slData = slData
-		this.isAss = slData.getIsAss() //是否是联动的
+		this.slDataMgr = slDataMgr
+		this.isAss = slDataMgr.getIsAss() //是否是联动的
 
 		let node = createBlockStr('block-' + this.bId)
 		el_parent.appendChild(node)
 
 		
-		var childNum = this.slData.getBlockNum() - this.bId - 1
+		var childNum = this.slDataMgr.getBlockNum() - this.bId - 1
 		if(childNum > 0) {
-			this.subSelScroll = new SelScroll(el_parent, this.slData, this.bId + 1)
+			this.subSelScroll = new SelScroll(el_parent, this.slDataMgr, this.bId + 1)
 		}
 		else {
 			this.subSelScroll = null
@@ -188,7 +189,7 @@ export class SelScroll {
 
 		//  更新选中数据 跟 子列表
 		var info = this.getCurSelInfo()
-		this.slData.setSel(this.bId, info.tag, info.name)
+		this.slDataMgr.setSel(this.bId, info.name)
 		if(this.subSelScroll && this.isAss) {
 			this.subSelScroll.updateList()
 		}
@@ -268,7 +269,7 @@ export class SelScroll {
 
 	//更新列表内容
 	updateList() {
-		this.listData = this.slData.getListDataById(this.bId)
+		this.listData = this.slDataMgr.getListDataById(this.bId)
 		this.addList()
 
 		this.el_items = this.el_list.getElementsByClassName('sarea-item')
@@ -279,8 +280,8 @@ export class SelScroll {
 		this.updateMaxTop()
 
 
-		let val = this.slData.getSelValById(this.bId)
-		let tag = this.slData.getTagByKey(this.listData, val)
+		let val = this.slDataMgr.getSelValById(this.bId)
+		let tag = this.slDataMgr.getTagByKey(this.listData, val)
 		this.setCurSel(tag)
 
 		if(this.subSelScroll) {
@@ -288,10 +289,9 @@ export class SelScroll {
 		}
 	}
 
-
+	// 获取当前所选的项值name 跟 所在位置标识值tag
 	getCurSelInfo() {
 		var tag = Math.round(this.el_cont.scrollTop / this.itemHei )
-
 		return {
 			tag: tag,
 			name: this.el_items[tag + 2].innerHTML

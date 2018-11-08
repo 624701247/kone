@@ -61,7 +61,7 @@ export class SelAssDataMgr {
 		this.selValAry = defAry
 	}
 
-	setSel(bId, tag, val) {
+	setSel(bId, val) {
 		if(this.selValAry[bId] != val) { // 选择有变，子项通通切换到第一项
 			this.selValAry[bId] = val	
 			this.initSelAry(this.selValAry)

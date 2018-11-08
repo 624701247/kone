@@ -47,7 +47,7 @@ export class SelDataMgr {
 		this.selValAry = defAry
 	}
 
-	setSel(bId, tag, val) {
+	setSel(bId, val) {
 		this.selValAry[bId] = val
 	}
 
