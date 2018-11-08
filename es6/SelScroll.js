@@ -1,9 +1,5 @@
 import * as utils from "./utils"
 
-import {selData} from "./SelData"
-import {selDataV2} from "./SelDataV2"
-
-
 var createBlockStr = function(idName) {
 	let node = document.createElement('div')
 	node.id = idName
@@ -62,7 +58,7 @@ export class SelScroll {
 		// console.log('start screenX', ev.targetTouches[0].screenY)  //相对于设备屏幕
 		// console.log('start pageX', ev.targetTouches[0].pageY) // ??
 		// console.log('start pageX', ev.targetTouches[0].clientY) // ??
-		// clog('多操作' + ev.changedTouches.length)
+		// console.log('多操作' + ev.changedTouches.length)
 
 		ev.preventDefault();
 		if(this.inSlowAni) {
@@ -85,7 +81,6 @@ export class SelScroll {
 			return
 		}
 
-		// var touch = ev.changedTouches[0]
 		this.drag(ev, false)
 	}
 	onTouchEnd(ev) {
@@ -143,7 +138,6 @@ export class SelScroll {
 		this.curMoveClientY = newClientY
 
 		if(isEnd) {
-			console.log('eee0', newTop)
 			this.aniSlowTop(target)
 		}
 	}
@@ -189,7 +183,6 @@ export class SelScroll {
 	}
 
 	// @param target : 动画dom对象
-	// @param endTop : 动画结束位置
 	aniSlowTop(target) {
 		this.inSlowAni = true
 
@@ -199,7 +192,6 @@ export class SelScroll {
 		if(this.subSelScroll && this.isAss) {
 			this.subSelScroll.updateList()
 		}
-		// console.log('级数，列表下表，列表值', this.bId, info.tag, info.name)
 
 		var endTop = info.tag * this.itemHei
 
@@ -255,7 +247,6 @@ export class SelScroll {
 	setCurSel(curIdx) {
 		this.el_cont.scrollTop = (curIdx) * this.itemHei
 	}
-
 
 	// 创建列表
 	addList() {

@@ -2,7 +2,7 @@
 非联动的选择数据
 */ 
 
-export class SelDataV2 {
+export class SelDataMgr {
 	constructor() {
 		this.listData;   //
 		this.blockNum;   //级数
@@ -73,5 +73,3 @@ export class SelDataV2 {
 		return count
 	}
 }
-// export var selDataV2 = new SelDataV2()
-

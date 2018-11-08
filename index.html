@@ -19,7 +19,8 @@
 	    background-color: #23272A;
 	}
 	.btn {
-		width:5em;height:4em;
+		width:15em;
+		height:4em;
 		line-height: 4rem;
 	}
 	</style>
@@ -27,8 +28,9 @@
 <body>
 
 <div id="btn-1" class="btn" style="background:red;">一级</div>
-<div id="btn-2" class="btn" style="background:yellow;">无联动三级</div>
+<div id="btn-2" class="btn" style="background:yellow;">无联动三级：生日选择器</div>
 <div id="btn-3" class="btn" style="background:green;">联动二级</div>
+<div id="btn-4" class="btn" style="background:orange;">联动三级：地区选择器</div>
 
 
 <script>
@@ -40,12 +42,12 @@
         '人妖':3
     }]
     document.getElementById('btn-1').onclick = function() {
-		sarea.initV2(as.sexAry)
+		sarea.init(as.sexAry)
         sarea.addSelEventListener(function(data) {
 		    console.log('on sel', data)
 	    })
-        sarea.openV2(['女'])	
-        // sarea.openV2()	
+        sarea.open(['女'])	
+        // sarea.open()	
 	}
 
 	/*无联动三级 （生日选择）*/
@@ -63,11 +65,11 @@
     }
     as.bothAty = [year, mon, day]
 	document.getElementById('btn-2').onclick = function() {
-		sarea.initV2(as.bothAty)
+		sarea.init(as.bothAty)
         sarea.addSelEventListener(function(data) {
 		    console.log('on sel', data)
 	    })
-        sarea.openV2()	
+        sarea.open()	
 	}
 	
 
@@ -91,91 +93,22 @@
 		}
 	}
     document.getElementById('btn-3').onclick = function() {
-		sarea.initV2(foodData, 2)
+		sarea.init(foodData, 2)
         sarea.addSelEventListener(function(data) {
 		    console.log('on sel', data)
 	    })
-        sarea.openV2()	
+        sarea.open(['肉'])	
 	}
 
 
-	/*一级联动 eg:
-	var jobData = {
-		'111111':1,
-		'222222':2,
-		'333333':3,
-		'444444':4,
-		'555555':5,
-		'666666':6,
-		'7777777':7,
-		'88888888888':8,
-		'999999999999':9,
-		'1010101010110101':10,
-		'asfasf':1,
-		'啊沙发上':1,
-		'士大夫':1,
-		'asfasf':1,
-		'士大夫':1,
-		'asfasf':1,
-		'asfasf':1,
-		'二':1,
-		'打光棍吧':1,
-		'asfasf':1,
-		'阿斯顿发生':1,
-		'sdfs ':1,
-		'asfasf':1,
-	}
-	sarea.init(jobData, 1)
-	sarea.addSelEventListener(function(data) {
-		console.log(data)
-	})
-	document.getElementById('btn-1').onclick = function() {
-		sarea.open()	
-	}*/
-	/*end of */
-
-	/*二级联动 eg: 
-	var foodData = {
-		'菜': {
-			id: 0,
-			items: {
-				'白菜':1,
-				'芥蓝':2,
-				'花菜':3
-			}
-		}
-		,'肉': {
-			id: 1,
-			items: {
-				'牛肉':1,
-				'猪肉':2,
-				'鸡肉':3
-			}
-		}
-	}
-	sarea.init(foodData, 2)
-	sarea.addSelEventListener(function(data) {
-		console.log(data)
-	})
-	document.getElementById('btn-1').onclick = function() {
-		sarea.open()	
-	}
-	*/
-	/*end of */
-
-
-
-	/*三级联动 eg:
-	document.getElementById('btn-1').onclick = function() {
-		// sarea.open(['香港'])
-		sarea.init(areaData, 3)  //areaData 地区选择
+	/*三级联动 */ 
+	document.getElementById('btn-4').onclick = function() {
+		sarea.init(areaData)
 		sarea.addSelEventListener(function(data) {
-			console.log('sel', data)
+			console.log('on sel', data)
 		})
-		// sarea.open(['天津', '县', '武清县'])	
 		sarea.open()	
-	}*/
-	/*end of */ 
+	}
 
 </script>
 
@@ -188,13 +121,11 @@ var clog = function(txt) {
         txt = JSON.stringify(txt);
     }
 
-    
     if(el_clog == null) {
         el_clog = document.createElement('div')
         el_clog.style.cssText = "position:absolute; z-index:9999; color:red; font-size: 0.4rem;word-break: break-all;"
         document.body.appendChild(el_clog)
     }
-
     el_clog.innerHTML += (txt + ' ` ')
 }
 
@@ -203,17 +134,3 @@ var clog = function(txt) {
 
 </body>
 </html>
-
-
-<!-- 
-
-九月份工时：
-南航-b2c裂变红包     28小时
-南航-意大利碎片     simon交接过来的，修改7小时
-珀莱雅-李易峰笑容站  18小时
-AEG-美裳呵护+健康生活共H5   开发18小时 修改3小时
-三星Galaxy Watch H5   开发6小时 修改4小时  
-
-
-
- -->
