@@ -54,15 +54,15 @@ export class SelAssDataMgr {
 		for(var idx = 0; idx < this.blockNum; idx++) {
 			if( curData == null || (JSON.stringify(curData) == '{}') ) { //
 				defAry[idx] = ''
-				console.log('abcfd')
+				// console.log('abcfd')
 			}
 			else {
 				if( defAry[idx] && curData[defAry[idx]] != null ) { // 默认值存在 并且 能再数据列表中找到该项
-					console.log('ddd', defAry)
+					// console.log('ddd', defAry)
 				}
 				else { //没有传默认值则取数据列表第一项
 					defAry[idx] = utils.getFirstKey(curData)
-					console.log('ccc', defAry)	
+					// console.log('ccc', defAry)	
 				}
 				curData = curData[defAry[idx]].items
 			}
@@ -90,7 +90,7 @@ export class SelAssDataMgr {
 
 	// 
 	getListDataById(bId) {	
-		console.log('bid', bId)	
+		// console.log('bid', bId)	
 		var data = this.listData
 		for(var idx = 0; idx < bId; idx++) {
 			if(this.selValAry[idx]) {
